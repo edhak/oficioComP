@@ -1,4 +1,38 @@
+//AGREGAR IMAGEN
+//referencia a faribase storage
 
+var imgStorage = firebase.storage();
+var imgRef = imgStorage.ref()
+
+function subir_foto(){
+  var img = document.querySelector('#imgUser').files[0];
+  var name = (+new Date()) + '-' + img.name;
+  var metadata =  {contentType: img.type};
+
+  var task =imgRef.child(name).put(img, metadata);
+
+    // // Pause the upload
+    // task.pause();
+    //
+    // // Resume the upload
+    // task.resume();
+    //
+    // // Cancel the upload
+    // task.cancel();
+
+
+  task.then((snapshot) => {snapshot.imgRef.getDownloadURL()})
+  .then((url) => {
+    console.log(url);
+    document.querySelector('#imagen1').src = url;
+  })
+
+
+  console.log(img.name);
+}
+
+
+//EDITAR USUARIO
 var db = firebase.firestore();
 //var user = firebase.auth().currentUser; //referencia a usuario
 

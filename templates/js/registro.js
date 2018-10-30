@@ -1,8 +1,8 @@
-
 function registrar(){
 //datos para al utentificación
   var email = document.getElementById('emailUser').value;
   var contrasena = document.getElementById('passUser').value;
+
   //id Usuarios
   //var idUser; //uid es id del usuario
   console.log(email+' '+ contrasena);
@@ -34,6 +34,7 @@ db.settings({
 
 //para registrar los datos generales
 function datosGenerales(){
+  var img = document.getElementById('imgUser').value;
   var nombre = document.getElementById('nombreUser').value;
   var apellido = document.getElementById('apellidoUser').value;
   var dni = document.getElementById('dniUser').value;
@@ -41,7 +42,7 @@ function datosGenerales(){
 
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
-      ingresarDatos (nombre,apellido,dni,oficio,user.uid)
+      ingresarDatos (img,nombre,apellido,dni,oficio,user.uid)
        // User is signed in.
     } else {
       // No user is signed in.
@@ -52,7 +53,7 @@ function datosGenerales(){
 
 
 //agregar los datos en la base de datos (utilizado en datos generales)
-function ingresarDatos (nombre,apellido,dni,oficio,idUser){
+function ingresarDatos (img,nombre,apellido,dni,oficio,idUser){
   //registro de datos generales
   db.collection("users").add({
     nombre: nombre,
