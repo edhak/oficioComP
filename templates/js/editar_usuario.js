@@ -1,45 +1,14 @@
 //AGREGAR IMAGEN
 //referencia a faribase storage
 
-var imgStorage = firebase.storage();
-var imgRef = imgStorage.ref()
-
-function subir_foto(){
-  var img = document.querySelector('#imgUser').files[0];
-  var name = (+new Date()) + '-' + img.name;
-  var metadata =  {contentType: img.type};
-
-  var task =imgRef.child(name).put(img, metadata);
-
-    // // Pause the upload
-    // task.pause();
-    //
-    // // Resume the upload
-    // task.resume();
-    //
-    // // Cancel the upload
-    // task.cancel();
-
-
-  task.then((snapshot) => {snapshot.imgRef.getDownloadURL()})
-  .then((url) => {
-    console.log(url);
-    document.querySelector('#imagen1').src = url;
-  })
-
-
-  console.log(img.name);
-}
-
-
-//EDITAR USUARIO
 var db = firebase.firestore();
 //var user = firebase.auth().currentUser; //referencia a usuario
-
 db.settings({
   timestampsInSnapshots: true
 });
 
+
+//EDITAR USUARIO
 //verificando si el usuario esta con inicio de sesion
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
@@ -53,6 +22,76 @@ firebase.auth().onAuthStateChanged(function(user) {
 var idDocUser;
 var emailUser;
 
+
+//editar Foto
+ var urlImgUser;
+
+function subir_foto(){
+  //referencia a firebase storage
+  var imgStorage = firebase.storage();
+  var imgRef = imgStorage.ref();
+
+  console.log(imgRef.name);
+  
+  var img = document.querySelector('#imgUser').files[0];
+  var name = (+new Date()) + '-' + img.name;
+  var metadata =  {contentType: img.type};
+
+  var task =imgRef.child(name).put(img, metadata);
+
+  task.on('state_changed', function(snapshot){
+    var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+    console.log('Upload is ' + progress + '% done');
+    switch (snapshot.state) {
+      case firebase.storage.TaskState.PAUSED: // or 'paused'
+        console.log('Upload is paused');
+        break;
+      case firebase.storage.TaskState.RUNNING: // or 'running'
+        console.log('Upload is running');
+        break;
+    }
+  }, function(error) {
+    // Handle unsuccessful uploads
+  }, function() {
+      task.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+      console.log('File available at', downloadURL);
+      ref_img(downloadURL, idDocUser);
+      //actualizar se actualiza el z
+      document.getElementById('imagen1').src = downloadURL;
+    });
+  });
+
+  //   var desertRef = storageRef.child('images/desert.jpg';
+  //
+  //   // Delete the file
+  //   desertRef.delete().then(function() {
+  //     // File deleted successfully
+  //   }).catch(function(error) {
+  //     // Uh-oh, an error occurred!
+  // });
+
+}
+
+
+
+//referencial la url de img obetenida a nuestra base de datos
+function ref_img(url, idDocUser){
+
+  datoUsuario = db.collection("users").doc(idDocUser);
+
+  return datoUsuario.update({
+    img:url //url de la imgen
+  })
+  .then(function() {
+    console.log(url);
+  })
+  .catch(function(error) {
+      // The document probably doesn't exist.
+      console.error("Error updating document: ", error);
+  });
+}
+
+
 //captura los datos de la base de datos
 function capturar_datos(user){
 
@@ -65,8 +104,8 @@ function capturar_datos(user){
             idDocUser = doc.id;
             emailUser = user.email;
             console.log(idDocUser);
-
-            mostrar_datos_usuario(
+            urlImgUser = doc.data().img;
+            mostrar_datos_usuario(doc.data().img,
               doc.data().nombre,
               doc.data().apellido,
               doc.data().dni,
@@ -82,7 +121,8 @@ function capturar_datos(user){
 
 
 //funcion mostrar los datos de usuario en perfil_usuario
-function mostrar_datos_usuario(nombre,apellido, dni, oficio,email){
+function mostrar_datos_usuario(img,nombre,apellido, dni, oficio,email){
+  document.getElementById('imagen1').src = img;
   document.getElementById('nombreUser').value = nombre;
   document.getElementById('apellidoUser').value = apellido;
   document.getElementById('dniUser').value = dni;
@@ -100,6 +140,13 @@ function abilitar_edicion(){
   // document.getElementById('emailUser').disabled = false;
 }
 
+function desabilitar_edicion(){
+  document.getElementById('nombreUser').disabled = true;
+  document.getElementById('apellidoUser').disabled = true;
+  document.getElementById('dniUser').disabled = true;
+  document.getElementById('oficioUser').disabled = true;
+  // document.getElementById('emailUser').disabled = false;
+}
 
 
 //funcion editar usuario
@@ -125,12 +172,14 @@ function editar(){
         nombre: nombre,
         apellido: apellido,
         dni: dni,
-        oficio: oficio
+        oficio: oficio,
       })
       .then(function() {
           console.log("Document successfully updated!");
-          mostrar_datos_usuario(nombre,apellido, dni, oficio, emailUser);
-          boton.innerHTML = 'Edicion';
+          mostrar_datos_usuario(urlImgUser,nombre,apellido, dni, oficio, emailUser);
+          boton.innerHTML = 'Editar'
+          // boton.onclick() = editar();
+          desabilitar_edicion();
       })
       .catch(function(error) {
           // The document probably doesn't exist.
