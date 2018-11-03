@@ -10,7 +10,7 @@ timestampsInSnapshots: true
 //
 function buscar(){
     document.getElementById('datos_usurios').innerHTML = '';
-    
+
    var palabraBuscada = document.getElementById('textoBuscar').value;
    var datos = [ "nombre","apellido", "dni", "oficio"];
 //

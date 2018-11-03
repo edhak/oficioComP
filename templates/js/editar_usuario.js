@@ -2,6 +2,7 @@
 //referencia a faribase storage
 
 var db = firebase.firestore();
+var storageRef = db.ref()
 //var user = firebase.auth().currentUser; //referencia a usuario
 db.settings({
   timestampsInSnapshots: true
@@ -24,7 +25,7 @@ var emailUser;
 
 
 //editar Foto
- var urlImgUser;
+var urlImgUser;
 
 function subir_foto(){
   //referencia a firebase storage
@@ -32,7 +33,7 @@ function subir_foto(){
   var imgRef = imgStorage.ref();
 
   console.log(imgRef.name);
-  
+
   var img = document.querySelector('#imgUser').files[0];
   var name = (+new Date()) + '-' + img.name;
   var metadata =  {contentType: img.type};
@@ -61,17 +62,17 @@ function subir_foto(){
     });
   });
 
-  //   var desertRef = storageRef.child('images/desert.jpg';
-  //
-  //   // Delete the file
-  //   desertRef.delete().then(function() {
-  //     // File deleted successfully
-  //   }).catch(function(error) {
-  //     // Uh-oh, an error occurred!
-  // });
+//   if()
+// //eliminar la imagen anterios de la base da datos
+//     var desertRef = storageRef.child();
+//     // Delete the file
+//     desertRef.delete().then(function() {
+//       // File deleted successfully
+//     }).catch(function(error) {
+//       // Uh-oh, an error occurred!
+//   });
 
 }
-
 
 
 //referencial la url de img obetenida a nuestra base de datos
@@ -128,7 +129,6 @@ function mostrar_datos_usuario(img,nombre,apellido, dni, oficio,email){
   document.getElementById('dniUser').value = dni;
   document.getElementById('oficioUser').value = oficio
   document.getElementById('emailUser').value = email;
-
 }
 
 //abilita el html para la edicion

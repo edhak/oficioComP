@@ -31,8 +31,67 @@ db.settings({
   timestampsInSnapshots: true
 });
 
+//datos para agregar coordenadas de mi trabajo=============================
+//hallando la posicion actual
+navigator.geolocation.getCurrentPosition(fn_ok, fn_mal);
+function fn_mal(){
+  console.log("algo anda mal, no se obtine las localización");
+}
+var posicion_inicio;
+function fn_ok(rta){
+  posicion_inicio = {lat: rta.coords.latitude, lng:rta.coords.longitude}
+  console.log(posicion_inicio);
+}
 
-//para registrar los datos generales
+//inicializanod el mapa
+// initMap();
+var coord_lat;
+var coord_lng;
+
+function initMap(){
+  var posicion;
+  var datosInit = {
+      center: posicion_inicio,
+      zoom:13
+    }
+
+  var map = new google.maps.Map(document.getElementById("registroMap"),datosInit);
+
+
+  var marker = new google.maps.Marker({
+    position: posicion,
+    map: map,
+    title: 'mis coordenadas de trabajo'
+  });
+
+  google.maps.event.addListener(map, 'click', function(event){
+    marker.setMap(null);// elimina los markes anteriores
+    posicion = {lat:event.latLng.lat(), lng:event.latLng.lng()}
+    coord_lat = posicion.lat;
+    coord_lng = posicion.lng;
+
+      marker = new google.maps.Marker({
+        position: posicion,
+        map: map,
+        title: 'mis coordenadas de trabajo'
+      });
+    // alert(event.latLng.lat()+", "+event.latLng.lng());
+  })
+
+  function clearMarkers() {
+        setMapOnAll(null);
+  }
+
+}
+
+
+// function datos_coord(lat,lng){
+//   db.collection('users').add()
+//   coord_lng = coord_lng;
+// }
+//=========================================================================
+
+//para registrar los datos generales ======================================
 function datosGenerales(){
   // var img = document.getElementById('imgUser').value;
   var nombre = document.getElementById('nombreUser').value;
@@ -42,7 +101,7 @@ function datosGenerales(){
 
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
-      ingresarDatos (nombre,apellido,dni,oficio,user.uid)
+      ingresarDatos (nombre,apellido,dni,oficio,user.uid,coord_lat,coord_lng)
        // User is signed in.
     } else {
       // No user is signed in.
@@ -50,20 +109,25 @@ function datosGenerales(){
     }
   });
 }
-
+//=========================================================================
 
 //agregar los datos en la base de datos (utilizado en datos generales)
-function ingresarDatos (nombre,apellido,dni,oficio,idUser){
+function ingresarDatos (nombre,apellido,dni,oficio,idUser,latitud,longitud){
   //registro de datos generales
   db.collection("users").add({
     nombre: nombre,
     apellido: apellido,
     dni: dni,
     oficio: oficio,
-    autor: idUser
+    autor: idUser,
+    coordenadas:{
+      latitud:latitud,
+      longitud:longitud
+    }
   })
   .then(function(docRef) {
     console.log("Document written with ID: ", docRef.id);
+    console.log(docRef.coordenadas);
   })
   .catch(function(error) {
     console.error("Error adding document: ", error);
