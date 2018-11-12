@@ -1,5 +1,4 @@
-//REGISTRO COMO TRABAJADOR TIENE MÁS CAMPOS
-
+// REGISTRO COMO COMO USUARIO NORMAL
 function registrar(){
 //datos para al utentificación
   var email = document.getElementById('emailUser').value;
@@ -33,59 +32,6 @@ db.settings({
   timestampsInSnapshots: true
 });
 
-//datos para agregar coordenadas de mi trabajo=============================
-//hallando la posicion actual
-navigator.geolocation.getCurrentPosition(fn_ok, fn_mal);
-function fn_mal(){
-  console.log("algo anda mal, no se obtine las localización");
-}
-var posicion_inicio;
-function fn_ok(rta){
-  posicion_inicio = {lat: rta.coords.latitude, lng:rta.coords.longitude}
-  console.log(posicion_inicio);
-}
-
-//inicializanod el mapa
-// initMap();
-var coord_lat;
-var coord_lng;
-
-function initMap(){
-  var posicion;
-  var datosInit = {
-      center: posicion_inicio,
-      zoom:13
-    }
-
-  var map = new google.maps.Map(document.getElementById("registroMap"),datosInit);
-
-
-  var marker = new google.maps.Marker({
-    position: posicion,
-    map: map,
-    title: 'mis coordenadas de trabajo'
-  });
-
-  google.maps.event.addListener(map, 'click', function(event){
-    marker.setMap(null);// elimina los markes anteriores
-    posicion = {lat:event.latLng.lat(), lng:event.latLng.lng()}
-    coord_lat = posicion.lat;
-    coord_lng = posicion.lng;
-
-      marker = new google.maps.Marker({
-        position: posicion,
-        map: map,
-        title: 'mis coordenadas de trabajo'
-      });
-    // alert(event.latLng.lat()+", "+event.latLng.lng());
-  })
-
-  function clearMarkers() {
-        setMapOnAll(null);
-  }
-
-}
-
 
 // function datos_coord(lat,lng){
 //   db.collection('users').add()
@@ -99,11 +45,11 @@ function datosGenerales(){
   var nombre = document.getElementById('nombreUser').value;
   var apellido = document.getElementById('apellidoUser').value;
   var dni = document.getElementById('dniUser').value;
-  var oficio = document.getElementById('oficioUser').value;
+  // var oficio = document.getElementById('oficioUser').value;
 
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
-      ingresarDatos (nombre,apellido,dni,oficio,user.uid,coord_lat,coord_lng)
+      ingresarDatos (nombre,apellido,dni,user.uid)
        // User is signed in.
     } else {
       // No user is signed in.
@@ -114,23 +60,22 @@ function datosGenerales(){
 //=========================================================================
 
 //agregar los datos en la base de datos (utilizado en datos generales)
-function ingresarDatos (nombre,apellido,dni,oficio,idUser,latitud,longitud){
+function ingresarDatos (nombre,apellido,dni,idUser){
   //registro de datos generales
   db.collection("users").add({
     nombre: nombre,
     apellido: apellido,
     dni: dni,
-    oficio: oficio,
     autor: idUser,
-    trabajador:true,
-    coordenadas:{
-      latitud:latitud,
-      longitud:longitud
-    }
+    trabajador: false
+    // coordenadas:{
+      // latitud:latitud,
+    //   longitud:longitud
+    // }
   })
   .then(function(docRef) {
     console.log("Document written with ID: ", docRef.id);
-    console.log(docRef.coordenadas);
+    // console.log(docRef.coordenadas);
   })
   .catch(function(error) {
     console.error("Error adding document: ", error);

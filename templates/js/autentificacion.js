@@ -1,4 +1,12 @@
 
+var db = firebase.firestore();
+
+db.settings({
+timestampsInSnapshots: true
+});
+
+
+
 function ingresar(){
   var email = document.getElementById('emailUser').value;
   var contrasena = document.getElementById('passUser').value;
@@ -30,7 +38,22 @@ function observador(){
       var uid = user.uid;
       var providerData = user.providerData;
 
-      aparecer(user);
+
+      var idAux;
+      db.collection('users').where("tipo", "==", "admin").get()
+        .then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+            idAux = doc.data().autor;
+            // console.log(uid);
+            // console.log(idAux == uid);
+                if (uid == idAux) {
+                  window.location.href = "http://127.0.0.1:8887/index1.html"
+                } else {
+                  // window.location.href = ""
+                  aparecer(user);
+                }
+            })
+          })
 
     } else {
       // User is signed out.
@@ -44,8 +67,6 @@ function observador(){
 observador();
 
 
-
-
 //funcion que oculta los botones ingresar y registrarse
 function ocultar(){
   var sesion = document.getElementById('sesion');
@@ -56,16 +77,13 @@ function ocultar(){
 function cuerpo(user){
   var saludo = document.getElementById("bienvenido");
   saludo.innerHTML = `
-  <h4 >Bienvenido! ${user.email}</h4>
-  <p>solo es una prueba </p>
-  <hr>
-  <p >Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
+  <ul class="navbar-nav mr-auto">
+    <li class="nav-item">
+      <a class="text-dark" href="#">Hola {${user.email}}</a>
+    </li>
+  </ul>
   `;
 }
-
-
-
-
 
 //funcion de crea los botones perfil y cerrar sesion
 function aparecer(user){
@@ -73,23 +91,34 @@ function aparecer(user){
 
   var perfil = document.getElementById('v_perfil');
   var cerrar_sesion = document.getElementById('v_cerrar_sesion');
+  var historialUsuario = document.getElementById('v_historial')
   if(user.emailVerified){
     ocultar();
     cuerpo(user);
 
     perfil.innerHTML = `
-      <a href="./templates/perfil_usuario.html">Perfil</a>
-      <p></p>
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="./templates/perfil_usuario.html">Perfil</a>
+        </li>
+      </ul>
+    `;
+
+    historialUsuario.innerHTML = `
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="./templates/historialUsuario.html">Historial</a>
+      </li>
+    </ul>
     `;
 
     cerrar_sesion.innerHTML =`
-      <button  id="v_cerrar" onclick="cerrar()">Cerrar Sesion</button>
-      <p></p>
+    <button id="v_cerrar" onclick="cerrar()" type="button" class="btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#exampleModal">
+      Cerrar Sesion
+    </button>
     `;
   }
 }
-
-
 
 
 // restaura asu forma inicial de inicial sesion
@@ -97,10 +126,12 @@ function blanco(){
   var perfil = document.getElementById('v_perfil');
   var cerrar_sesion = document.getElementById('v_cerrar_sesion');
   var saludo = document.getElementById("bienvenido");
+  var historial = document.getElementById("v_historial")
 
   perfil.innerHTML = ``;
   cerrar_sesion.innerHTML =``;
   saludo.innerHTML = ``;
+  historial.innerHTML = ``;
 
   // a la normalidad
   document.getElementById('sesion').style.display = 'block';

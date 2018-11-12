@@ -5,48 +5,120 @@
     <title></title>
 <!-- referencia cnd boostrap  -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
 <!-- referencia base de datos firebase -->
-
-    <!-- <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-app.js"></script> -->
-    <!-- <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-auth.js"></script> -->
-
-    <!-- <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-auth.js"></script> -->
     <script src="https://www.gstatic.com/firebasejs/5.5.6/firebase.js"></script>
-    <!-- <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-database.js"></script> -->
-    <!-- <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-firestore.js"></script> -->
 
   </head>
   <body>
 
-    <a>Perfil usuario</a>
-    <!-- subir fotos -->
-    <div>
-      <img id="imagen1" style="width: 300px; height: 300px;">
+    <div class="container">
+    	<div class="row">
+    		<div class="col-lg-6 col-md-6 mx-auto">
+    		<div class="card">
+    		  <div class="card-body">
+    			<div>
+
+            <img id="imagen1" class="img-responsive" alt="" style="width: 250px; height: 150px; margin:auto;">
+
+
+            <div id="selectFoto" disabled>
+              <div class="form-group">
+                <label for="exampleFormControlFile1">subir nueva foto</label>
+                <input type="file" class="form-control-file" name="user" id="imgUser">
+              </div>
+              <button onclick="subir_foto()" class="btn btn-success btn-sm">Subir Foto</button>
+            </div>
+
+            <p></p>
+
+            <a id="cv1">Ver CV aquí</a>
+            <div id="selectFoto" disabled>
+              <div class="form-group">
+                <label for="exampleFormControlFile1">subir Curiculum</label>
+                <input type="file" class="form-control-file" name="user" id="cvUser">
+              </div>
+              <button onclick="subir_cv()" class="btn btn-dark btn-sm">Subir CV</button>
+            </div>
+
+            <p></p>
+            <a id="antecedente1">Ver Antecedentes Penales</a>
+            <div id="selectFoto" disabled>
+              <div class="form-group">
+                <label for="exampleFormControlFile1">Subir Antecedentes</label>
+                <input type="file" class="form-control-file" name="user" id="anUser">
+              </div>
+              <button onclick="subir_an()" class="btn btn-danger btn-sm">Subir Antecedentes</button>
+            </div>
+
+    			  <div class="form-group">
+    				<label>Nombre: </label>
+    				<input id="nombreUser" type="text" class="form-control" placeholder="ingrese Nombre" disabled>
+    			  </div>
+    			  <div class="form-group">
+    				<label>Apellido: </label>
+    				<input id="apellidoUser" type="text" class="form-control" placeholder="Ingrese Apellido" disabled>
+    			  </div>
+    			  <div class="form-group">
+    				<label>DNI: </label>
+    				<input id="dniUser" type="text" class="form-control" placeholder="Ingrese DNI" disabled>
+    			  </div>
+    			  <div class="form-group">
+    				<label>Oficio: </label>
+    				<input id="oficioUser" class="form-control" placeholder="Ingrese Email" disabled>
+    			  </div>
+            <div class="form-group">
+    				<label>Numero de celular o casa: </label>
+    				<input id="numeroUser" class="form-control" placeholder="Ingrese Numero" disabled>
+    			  </div>
+            <div class="form-group">
+    				<label>Email: <span class="text-danger">*</span></label>
+    				<input id="emailUser" type="email" class="form-control" disabled>
+    			  </div>
+        			<div class="form-group">
+
+        			</div>
+    			  <button id="botonEditar" class="btn btn-outline-primary btn-block" onclick="editar()">Editar</button>
+            <a class="btn btn-success btn-block" href="../index.html">Regresar al inicio</a>
+
+    			</div>
+    		  </div>
+    		</div>
+      </div>
     </div>
+  </div>
+
+
+<!-- =============================================================== -->
+    <!-- <a>Perfil usuario</a> -->
+    <!-- subir fotos -->
+    <!-- <div>
+      <img id="imagen1" style="width: 300px; height: 300px;">
+    </div> -->
 
 
     <!-- subir fotos -->
-    <div id="selectFoto" disabled>
+    <!-- <div id="selectFoto" disabled>
       <div class="form-group">
         <label for="exampleFormControlFile1">subir nueva foto</label>
         <input type="file" class="form-control-file" name="user" id="imgUser">
       </div>
       <button onclick="subir_foto()">Subir Foto</button>
-    </div>
+    </div> -->
 
     <!-- datos generales -->
-    <input id="nombreUser" type="text" placeholder="Ingrese nombre" disabled><br>
+    <!-- <input id="nombreUser" type="text" placeholder="Ingrese nombre" disabled><br>
     <input id="apellidoUser" type="text" placeholder="Ingrese apellido" disabled><br>
     <input id="dniUser" type="text" placeholder="Ingrese DNI" disabled><br>
     <input id="oficioUser" type="text" placeholder="Ingrese oficio" disabled><br>
 
     <input id="emailUser" type="email"placeholder="Ingrese Email" disabled><br>
-
     <button id="botonEditar" onclick="editar()">Editar</button>
 
     <div class="">
-      <a href="../index.html">Regresar al inicio</a>
-    </div>
+    <a href="../index.html">Regresar al inicio</a>
+  </div> -->
 
 
 

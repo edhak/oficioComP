@@ -5,60 +5,209 @@
     <title></title>
 <!-- referencia cnd boostrap  -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 <!-- referencia base de datos firebase -->
-
-    <!-- <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-app.js"></script> -->
-    <!-- <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-auth.js"></script> -->
-
-    <!-- <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-auth.js"></script> -->
     <script src="https://www.gstatic.com/firebasejs/5.5.6/firebase.js"></script>
-    <!-- <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-database.js"></script> -->
-    <!-- <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-firestore.js"></script> -->
+
 
   </head>
   <body>
 
-<!-- bloque de borrar la sesecion, aparece cuando se inicia sesion -->
-    <p></p>
-    <div id="v_perfil"></div>
-    <p></p>
-    <div id="v_cerrar_sesion"></div>
-
-<!-- inicio de secion que se oculta cuando se inicia secion -->
-    <div id="sesion">
-      <a href="./templates/registro.html">Registro usuario</a>
-      <p>Iniciar sesion usuario</p>
-      <input id="emailUser" type="text" placeholder="Ingrese Email">
-      <input id="passUser" type="password" placeholder="Ingrese contrasena">
-
-      <button type="button" id="v_ingresar" onclick="ingresar()">Inicias Sesion</button>
+<!-- barra de navegacion icion de sesion -->
     </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">OficioCom</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent" style="justify-content: space-around">
+        <div id="v_perfil">
+          <!-- se incluira el enlace pra ir a perfil de usuario -->
+        </div>
+        <div id="v_historial">
+
+        </div>
+        <div id="bienvenido">
+            <!-- //algo para el usuario -->
+        </div>
+        <div class="navbar-brand float-right" id="sesion">
+          <button type="button" class="btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#exampleModal">
+            ingresar
+          </button>
+          <a class="btn btn-outline-success my-2 my-sm-0" href="./templates/eleccionRegistro.html">Registrarse</a>
+        </div>
+        <div class="form-inline my-2 my-lg-0" id="v_cerrar_sesion">
+          <!-- se incluira el boton para salir de sesion -->
+        </div>
+      </div>
+    </nav>
+    <!-- fin bara de navegacion ] -->
+
+
+    <!-- Modal boton ingresar-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Ingrese Datos</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <!-- para iniciar sesion -->
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Email</label>
+              <input type="email" class="form-control" id="emailUser" aria-describedby="emailHelp" placeholder="Ingrese Email">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1">Contraseña</label>
+              <input type="password" class="form-control" id="passUser" placeholder="Contraseña">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="ingresar()">Iniciar Sesion</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
 
 <!-- mesaje de bienvenida -->
-    <div id="bienvenido">
-        <!-- //algo para el usuario -->
+    <!-- <p>Realizar busquedas</p> -->
+    <div class="container">
+        <br/>
+    	<div class="row justify-content-center">
+          <div class="col-12 col-md-10 col-lg-8">
+              <form class="card card-sm">
+                  <div class="card-body row no-gutters align-items-center">
+                      <div class="col-auto">
+                          <i class="fas fa-search h4 text-body"></i>
+                      </div>
+                      <!--end of col-->
+                      <div class="col">
+                          <!-- <input id="textoBuscar" class="form-control form-control-lg form-control-borderless" type="search" placeholder="Ingrese oficio"> -->
+                          <select id="textoBuscar" class="form-control form-control-lg">
+                            <option selected>Escoge una Especialidad</option>
+                            <option>Aritmetica</option>
+                            <option>Algebra</option>
+                            <option>Trigonometría</option>
+                            <option>Razonamiento Matemático</option>
+                            <option>Geometria</option>
+                          </select>
+                      </div>
+                      <!--end of col-->
+                      <div class="col-auto">
+                          <button onclick="buscar()" class="btn btn-lg btn-success" type="button">Buscar</button>
+                      </div>
+                      <!-- <a href="./templates/busqueda_mapa.html"> Ver Mapa</a> -->
+                      <!-- modal para visualizar el mapa de busqueda -->
+                      <button   type="button" onclick="canalizando()" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#exampleModal1">
+                        Ver Mapa
+                      </button>
+                      <!--end of col-->
+                  </div>
+              </form>
+          </div>
+          <!--end of col-->
+      </div>
     </div>
 
 
-    <p>Realizar busquedas</p>
-    <input id="textoBuscar" type="text" placeholder="Ingrese al trabajador que necesite">
-    <button onclick="buscar()">Buscar</button>
-    <a href="./templates/busqueda_mapa.html"> Ver Mapa</a>
-
-    <div id="datos_usurios">
-<!-- se ingresa los usuarios de la busqueda(funcion definida en buscar.js/ buscar()) -->
+    <!-- Modal para visualizar el mapa de busqueda-->
+    <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document" >
+        <div class="modal-content center" style="width: 750px; height: 650px;">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Busqueda Mapa</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" >
+            <!-- visualizar el mapa con las busquedas-->
+            <div id="map" style="width: 700px; height: 500px;"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
     </div>
 
+<!-- busqueda de los datos  -->
+<div class="container mt-3" id="datos_usurios">
+</div>
 
+
+
+<!-- Modal 1 contactar para la Busqueda normal-->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="notificacion" class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button onclick="confirmar_contacto()" type="button" class="btn btn-primary" data-dismiss="modal">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- modal ver el perfil del usuario  -->
+<!-- Button trigger modal -->
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle1" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalCenterTitle1">Perfil Trabajador</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div id="verPerfil" class="modal-body">
+      <!-- se agregan los perfiles -->
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+
+    <!-- <div class="container" id="datos_usurios"> -->
+      <!-- se ingresa los usuarios de la busqueda(funcion definida en buscar.js/ buscar()) -->
+    <!-- </div> -->
 
     <!-- javascript opcional de proyecto -->
     <script  src="./templates/js/ref_firebase.js"></script>
     <script  src="./templates/js/autentificacion.js"></script>
     <script src="./templates/js/buscar.js"></script>
+    <script src="./templates/js/busqueda_mapa.js"></script>
     <!-- boostrap javascript -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCr2-lyq7o5vDRj9JyEOTELG_lDwvEwcuA&">
+    </script>
+    <!-- callback=initMap -->
 
   </body>
 </html>
